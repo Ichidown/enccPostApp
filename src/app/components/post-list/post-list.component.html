@@ -1,0 +1,79 @@
+
+
+<!-- Top BG -->
+<div class="view intro" style="background-image: url(assets/images/metal-manufacturing-facility-1.jpg); background-attachment: fixed; height: 250px;">
+  <div class="full-bg-img mask rgba-white-light">
+      <div class="container">
+          <div class="d-flex align-items-center d-flex justify-content-center" style="height: 250px">
+              <div class="row mt-5">
+                  <div class="col-md-12 animated fadeInUp mb-3">
+                      <div class="intro-info-content text-center">
+                          <a class="h1 display-1 mb-2">ENCC <a class="indigo-text font-bold">GROUPE</a></a>
+                          <h5 class="font-up mb-3 mt-1 font-bold">quelque lorem ipus trucs </h5>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Top BG -->
+
+<div class="container " style="min-height: 120vh; display: flex; flex-flow: column;">
+    <h2 class="h1 font-bold mdb-color-text text-center my-5">Documents administratif</h2>
+    <div class="form-group col-md-3 m-5 text-center">
+        <select class="form-control" id="Select1" (change) = "typePickEvent($event)"
+            style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <option [value]="-1" > Toute les catégories </option>
+                <option *ngFor="let ftype of categories; let i = index" [value]="ftype.id"> {{ftype.title}} </option>
+        </select>
+    </div>
+
+    <!-- Post List -->
+    <div class="row innerShadow backgroundBluePrintPatern text-center p-3" style="border-radius: 7px; flex: auto;">
+        <div id="card_{{i}}" class="col-md-3 mt-3 animated zoomIn" *ngFor="let fpost of posts; let i = index" style="animation-duration: 0.4s;" [style.animation-delay]="i/10+'s'">
+            <div class="z-depth-1 mb-5" style="border-radius: 7px; overflow: hidden;">
+                <div id="img_{{i}}" class="hoverZoom" style="background-image: url('assets/images/loadingImage.gif'); background-size: cover; background-position: center;">
+                    <div class="hoverBg" >
+                        <div class="p-3 hoverText">
+                            <!-- Title -->
+                            <h5 class="font-weight-bold dark-grey-text mb-3" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size:120%;">
+                                {{fpost.title}}
+                            </h5>
+
+                            <!-- Description -->
+                            <p class="dark-grey-text" style=" overflow: hidden; text-overflow: ellipsis; height: 200px;">{{fpost.description}}</p>
+                            
+                            <!-- Date & Extention -->
+                            <div class="news-data d-flex justify-content-between">
+                                <p class="font-weight-bold dark-grey-text" style="font-size:75%;">
+                                    <i class="fa fa-clock-o pr-2"></i>{{fpost.date}}
+                                </p>
+                                <h6 class="light-blue-text font-weight-bold" style="font-size:75%;">
+                                    <i class="fa fa-file pr-2" ></i>{{fpost.extention}}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group animated bounceIn" style="margin-top: -125px; animation-duration: 0.5s;" [style.animation-delay]="0.5+(i/10)+'s'">
+                <button mdbBtn type="button" size="sm" (click) = "downloadEvent(i)" color="mdb-color" class="waves-light z-depth-0 p-1 hoverBtn" mdbWavesEffect>
+                    <i class="fa fa-arrow-down prefix hoverArrow m-1"></i>Telecharger
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Post List -->
+</div>
+
+
+<!-- Bottmon BG -->
+<div class="view intro mt-5" style="background-image: url(assets/images/metal-manufacturing-facility-1.jpg); background-attachment: fixed; background-size: cover; min-height: 300px">
+  <div class="full-bg-img mask rgba-white-light">
+  </div>
+  <div class="col-md-6 text-center text-md-left mb-5">
+      <div class="white-text"></div>
+  </div>
+</div>
+<!-- Bottmon BG -->

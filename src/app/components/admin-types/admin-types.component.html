@@ -1,0 +1,176 @@
+
+
+<div class="animated fadeInUp z-depth-1" style="margin-left:5%; margin-right:5%; margin-bottom: 5%; padding: 20px; background-color: white; min-height: 70vh; display: flex; flex-flow: column;">
+
+    <h1 style="margin-left:3%; margin-bottom: 20px;">
+      Liste des documents
+      <button mdbBtn type="button" color="info" outline="true" size="sm" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
+        class="z-depth-0 p-1" (click)="openModalForm(-1)">
+        <i class="fa fa-plus prefix m-1"></i> Nouveau document
+      </button>
+    </h1>
+   
+
+    <table class="table table-hover table-bordered " style="table-layout: fixed; width: 100%;">
+      <thead class="grey lighten-4 z-depth-0">
+        <tr class="z-depth-1">
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 15%;"><mdb-icon icon="hashtag" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Id</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%;"><mdb-icon icon="book" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Nom de la categorie</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 35%;"></th>
+        </tr>
+      </thead>
+
+      <!-- Table body -->
+        <tbody class="grey lighten-3" >
+            <tr *ngFor="let ftype of categories; let i = index">
+                <th class="p-2" style="text-align: center; width: 20px" scope="row">{{ftype.id}}</th>
+                <td class="p-2" style="max-width: 0; overflow: hidden; text-overflow: ellipsis;">{{ftype.title}}</td>
+                <td class="p-2">
+                  <div class="z-depth-1">
+                        <div class="btn-group" style="table-layout: fixed; width: 100%;">
+                          <button mdbBtn color="indigo" outline="true" size="sm" mdbWavesEffect type="button" class="p-1 col-md-6 z-depth-0" 
+                            (click)="openModalForm(i)">
+                              <i class="fa fa-pencil prefix"></i>
+                              Renomer
+                          </button>
+                          <button mdbBtn color="danger" outline="true" size="sm" mdbWavesEffect type="button" class="p-1 col-md-6 z-depth-0"
+                            (click)="CollapseContent.toggle()" (blur)="CollapseContent.hide()" >
+                              <i class="fa fa-trash prefix"></i>
+                              Supprimer
+                          </button>
+                        </div>
+                        <div [mdbCollapse]="isCollapsed"  #CollapseContent="bs-collapse" class="text-center" >
+                            <div class="btn-group" style="margin-bottom: 3%;">
+                              <button mdbBtn color="danger" size="sm" mdbWavesEffect type="button" class="m-0" (click)="DeleteEvent(i)" >
+                                  <i class="fa fa-check prefix white-text "></i>
+                              </button>
+                              <button mdbBtn color="success" size="sm" mdbWavesEffect type="button" class="m-0" (click)="CollapseContent.hide()" >
+                                  <i class="fa fa-close prefix white-text "></i>
+                              </button>
+                            </div>
+                        </div>
+                  </div>
+                </td>
+              </tr>
+        </tbody>
+      <!-- Table body -->
+    </table>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!------------------------- Modal Body --------------------------->
+
+
+<div mdbModal #formFrame="mdbModal" style="overflow: auto;" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-notify modal-info" role="document">
+  
+      <form [formGroup]="modalformGroup">
+      <!--Content-->
+      <div class="modal-content">
+        <!--Header-->
+        <div class="modal-header m-0 p-2">
+          <p class="heading lead">{{modalTitle}}</p>
+  
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="formFrame.hide()">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+        </div>
+  
+        <!--Body-->
+        <div class="modal-body" >
+  
+            <div class="md-form">
+              <i class="fa fa-pencil prefix grey-text"></i>
+              <input data-error=" " data-success=" " type="text" [value]="category.title" (input)="category.title = $event.target.value" id="titleForm" [validateSuccess]="false" [formControl]="FormModalName" class="form-control validate" mdbInputDirective>
+              <label for="titleForm">Nom de categorie</label>
+            </div>
+  
+        </div>
+  
+        <!--Footer-->
+        <div class="modal-footer justify-content-center  m-0">
+          <div class="btn-group" style="width: 70%;">
+            <a type="submit" mdbBtn color="primary" class="col-md-6 waves-light m-1 p-1" (click)="submitForm(modalformGroup)" mdbWavesEffect>
+              Confirmer
+              <i class="fa fa-check fa-2x animated rubberBand prefix"></i>
+            </a>
+            <a type="button" mdbBtn color="primary" outline="true" class="col-md-6 waves-light m-1 p-1" mdbWavesEffect (click)="formFrame.hide()" data-dismiss="modal">
+              Anuler
+              <i class="fa fa-close fa-2x animated rubberBand"></i>
+            </a>
+          </div>
+        </div>
+        
+      </div>
+      <!--/.Content-->
+    </form>
+  
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- POP UP MODAL-->
+
+<div mdbModal #popUpframe="mdbModal" (click)="popUpframe.hide()" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: false, ignoreBackdropClick: true}">
+  <div class="modal-dialog modal-frame modal-top modal-notify modal-info shadow" role="document">
+    <!--Content-->
+    <div class="modal-content" (mouseover)="popUpframe.hide()" style="background-color: #ff7474;">
+      <!--Body-->
+      <div class="modal-body p-1">
+        <div class=" row d-flex justify-content-center align-items-center">
+          <h4 class="white-text m-0 "> {{errorMsg}}</h4>
+        </div>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+
+<!-- POP UP MODAL SUCCESS -->
+
+<div mdbModal #popUpframe2="mdbModal" (click)="popUpframe2.hide()" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: false, ignoreBackdropClick: true}">
+  <div class="modal-dialog modal-frame modal-top modal-notify modal-info shadow" role="document">
+    <!--Content-->
+    <div class="modal-content" (mouseover)="popUpframe2.hide()" style="background-color: #4fc23f;">
+      <!--Body-->
+      <div class="modal-body p-1">
+        <div class=" row d-flex justify-content-center align-items-center">
+          <h4 class="white-text m-0 "> {{successMsg}}</h4>
+        </div>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>

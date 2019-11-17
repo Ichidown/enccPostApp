@@ -1,0 +1,222 @@
+<div class="animated fadeInUp z-depth-1" style="margin-left:5%; margin-right:5%; margin-bottom: 20px; padding: 20px; background-color: white; min-height: 70vh; display: flex; flex-flow: column;">
+
+  <h1 style="margin-left:3%">
+    Liste des documents
+    <button mdbBtn type="button" color="info" outline="true" size="sm" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
+      class="z-depth-0 p-1" (click)="openModalForm(-1)">
+      <i class="fa fa-plus prefix m-1"></i> Nouveau document
+    </button>
+  </h1>
+
+  <div class="form-group col-md-3">
+    <select class="form-control" id="Select1" (change)="typePickEvent($event)" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+      <option [value]="-1"> Toute les catégories </option>
+      <option *ngFor="let ftype of categories; let i = index" [value]="ftype.id"> {{ftype.title}} </option>
+    </select>
+  </div>
+
+  <div>
+    <table class="table table-hover table-bordered" style="table-layout: fixed; width: 100%;">
+      <thead class="grey lighten-4 z-depth-0">
+        <tr class="z-depth-1">
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 7%;"><mdb-icon icon="hashtag" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Id</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 10%;"><mdb-icon icon="book" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Titre</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 20%;"><mdb-icon icon="commenting" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Description</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 10%;"><mdb-icon icon="table" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Date</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 10%;"><mdb-icon icon="image" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Image</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 10%;"><mdb-icon icon="file" class="mr-2 grey-text" aria-hidden="true"></mdb-icon>Fichier</th>
+          <th scope="col" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 20%;"></th>
+        </tr>
+      </thead>
+      
+      <tbody class="grey lighten-3">
+          <tr id="row_{{i}}" *ngFor="let fpost of posts; let i = index">
+            <td class="p-2" style="text-align: center; width: 20px">{{fpost.id}}</td>
+            <td class="p-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{fpost.title}}</td>
+            <td class="p-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{fpost.description}}</td>
+            <td class="p-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">{{fpost.date}}</td>
+            <td class="p-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{fpost.img_path}}</td>
+            <td class="p-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{fpost.file_path}}</td>
+            <td class="p-2">
+              <div class="z-depth-1">
+                  <div class="btn-group" style="table-layout: fixed; width: 100%;">
+                    <button mdbBtn color="indigo" outline="true" size="sm" mdbWavesEffect type="button" class="p-1 col-md-6 z-depth-0"
+                      (click)="openModalForm(i)">
+                      <i class="fa fa-pencil prefix"></i>
+                      Modifier
+                    </button>
+                    <button mdbBtn color="danger" outline="true" size="sm" mdbWavesEffect type="button" class="p-1 col-md-6 z-depth-0"
+                      (click)="CollapseContent.toggle()" (blur)="CollapseContent.hide()">
+                      <i class="fa fa-trash prefix"></i>
+                      Supprimer
+                    </button>
+                  </div>
+
+                  <div [mdbCollapse]="isCollapsed" #CollapseContent="bs-collapse" class="text-center">
+                    <div class="btn-group" style="margin-bottom: 3%;">
+                      <button mdbBtn color="danger" size="sm" mdbWavesEffect type="button" height="200" class="m-0"
+                        (click)="DeleteEvent(i)">
+                        <i class="fa fa-check prefix white-text "></i>
+                      </button>
+                      <button mdbBtn color="success" size="sm" mdbWavesEffect type="button" height="200" class="m-0"
+                        (click)="CollapseContent.hide()">
+                        <i class="fa fa-close prefix white-text "></i>
+                      </button>
+                    </div>
+                  </div>
+              </div>
+
+            </td>
+          </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+</div>
+
+
+<!------------------------- Modal Body --------------------------->
+
+<div mdbModal #formFrame="mdbModal" style="overflow: auto;" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-info" role="document">
+
+    <form [formGroup]="modalformGroup">
+      <!--Content-->
+      <div class="modal-content">
+        <!--Header-->
+        <div class="modal-header m-0 p-2">
+          <p class="heading lead">{{modalTitle}}</p>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="formFrame.hide()">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+        </div>
+
+        <!--Body-->
+        <div class="modal-body m-0">
+
+          <div class="md-form m-0 p-0">
+            <i class="fa fa-pencil prefix grey-text"></i>
+            <input data-error=" " data-success=" " type="text" [value]="post.title" (input)="post.title = $event.target.value"
+              id="titleForm" [validateSuccess]="false" [formControl]="FormModalTitle" class="form-control validate"
+              mdbInputDirective>
+            <label for="titleForm">Titre</label>
+          </div>
+
+          <!--Grid row-->
+          <div class="row center m-0">
+            <!--Grid column-->
+            <div class="col-md-6 m-0 p-1">
+              <div class="md-form m-0 p-1">
+                <textarea data-error=" " data-success=" " type="text" [value]="post.description" (input)="post.description = $event.target.value"
+                  id="descriptionForm" [validateSuccess]="false" [formControl]="FormModalDescription" class="md-textarea form-control validate m-0 p-0"
+                  mdbInputDirective></textarea>
+                <label for="descriptionForm">Description</label>
+              </div>
+              <br>
+              <div class="btn-group m-0 p-0" mdbDropdown>
+                  <button mdbDropdownToggle type="button" mdbBtn size="sm" color="primary" class="dropdown-toggle waves-light"
+                    mdbWavesEffect>
+                    Categories
+                  </button>
+      
+                  <div class="dropdown-menu dropdown-primary z-depth-1 p-1">
+                    <mdb-checkbox *ngFor="let ftype of categories; let i = index" id="checkbox{{i}}" (change)="changeCheckbox(i)"
+                      [checked]="associationCheckList[i]" [default]="false"> {{ftype.title}}</mdb-checkbox>
+                  </div>
+                </div>
+            </div>
+
+            <!--Grid column-->
+            <div class="col-md-6 md-form m-0 p-0" style="height: 20ch;">
+              <img [src]="previewImageContent" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+          </div>
+          <!--Grid row-->
+
+
+          
+         
+
+          <div class="md-form m-2 p-0">
+            <div class="input-group">
+              <div class="custom-file">
+                <input #imgPicker name="img_picker" id="img_picker" type="file" imageUpload (imageSelected)="imgPicked($event)"
+                  [resizeOptions]="resizeOptions" class="custom-file-input" accept="image/x-png,image/jpeg">
+                <label #ImgPathLabel name="ImgPathLabel" id="ImgPathLabel" class="custom-file-label" for="img_picker"></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="md-form m-2 p-0">
+            <div class="input-group">
+              <div class="custom-file">
+                <input #file_picker name="file_picker" id="file_picker" valid-file type="file" (change)="filePicked($event)"
+                  class="custom-file-input">
+                <label #FilePathLabel name="FilePathLabel" id="FilePathLabel" class="custom-file-label" for="file_picker"></label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--Footer-->
+        <div class="modal-footer justify-content-center m-0">
+          <div class="btn-group" style="width: 70%;">
+            <a type="submit" mdbBtn color="primary" class="col-md-6 waves-light m-1 p-1" (click)="submitForm(modalformGroup)"
+              style="white-space: nowrap; overflow: hidden;" mdbWavesEffect>
+              Confirmer
+              <i class="fa fa-check fa-2x animated rubberBand prefix"></i>
+            </a>
+            <a type="button" mdbBtn color="primary" outline="true" class="col-md-6 waves-effect m-1 p-1" mdbWavesEffect (click)="formFrame.hide()"
+              style="white-space: nowrap; overflow: hidden;" data-dismiss="modal">
+              Anuler
+              <i class="fa fa-close fa-2x animated rubberBand"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!--/.Content-->
+    </form>
+
+  </div>
+</div>
+
+
+<!-- POP UP MODAL ERROR -->
+
+<div mdbModal #popUpframe="mdbModal" (click)="popUpframe.hide()" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: false, ignoreBackdropClick: true}">
+  <div class="modal-dialog modal-frame modal-top modal-notify modal-info shadow" role="document">
+    <!--Content-->
+    <div class="modal-content" (mouseover)="popUpframe.hide()" style="background-color: #ff7474;">
+      <!--Body-->
+      <div class="modal-body p-1">
+        <div class=" row d-flex justify-content-center align-items-center">
+          <h4 class="white-text m-0 "> {{errorMsg}}</h4>
+        </div>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+
+<!-- POP UP MODAL SUCCESS -->
+<div mdbModal #popUpframe2="mdbModal" (click)="popUpframe2.hide()" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: false, ignoreBackdropClick: true}">
+  <div class="modal-dialog modal-frame modal-top modal-notify modal-info shadow" role="document">
+    <!--Content-->
+    <div class="modal-content" (mouseover)="popUpframe2.hide()" style="background-color: #4fc23f;">
+      <!--Body-->
+      <div class="modal-body p-1">
+        <div class=" row d-flex justify-content-center align-items-center">
+          <h4 class="white-text m-0 "> {{successMsg}}</h4>
+        </div>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>

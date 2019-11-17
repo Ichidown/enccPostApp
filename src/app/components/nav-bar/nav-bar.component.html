@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark text-center p-1" style="background-color: rgb(52, 58, 64);">
+  <a class="navbar-brand white-text m-0 p-0 mr-5" style="margin-right: 200px; font-weight: 350;"> 
+    <img class="logo mr-2" src="assets/images/encc-logo-big.png" alt="Encc" height="40"> 
+    Espace administrateur
+  </a>
+  
+  <a style="float: left; " class="nav-link white-text waves-light mr-1" mdbWavesEffect [routerLink]="['/admin']">  Liste des fichiers  </a>
+  <a style="float: left; " class="nav-link white-text waves-light mr-3" mdbWavesEffect [routerLink]="[{ outlets: { adminRouter: ['types'] } }]">  Liste des types  </a>
+  <a style="float: left; " href="test.php" class="nav-link white-text waves-light mr-3" mdbWavesEffect [routerLink]="[{ outlets: { adminRouter: ['types'] } }]">  New Url  </a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbar1">
+    <ul class="navbar-nav ml-auto"> 
+
+    <li class="nav-item"><h5 class="nav-link m-0"> {{curentUser}} </h5></li>
+    <li class="nav-item">
+        <button mdbBtn type="button" color="dark-green" class="waves-light" size="sm" (click) = "LogOutEvent()" mdbWavesEffect>Deconnecter <mdb-icon icon="sign-out" class="ml-1"></mdb-icon></button>
+    </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+<br>
+<br>
+
+<div>
+  <router-outlet  name="adminRouter"></router-outlet>
+</div>
